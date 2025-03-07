@@ -1,0 +1,34 @@
+name: Deploy to Raspberry Pi
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.RASPBERRY_SSH_KEY }}
+          
+      - name: Add Raspberry Pi to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p 22 ${{ secrets.RASPBERRY_HOST }} >> ~/.ssh/known_hosts
+          
+      - name: Deploy to Raspberry Pi
+        run: |
+          ssh -p 22 ${{ secrets.RASPBERRY_USER }}@${{ secrets.RASPBERRY_HOST }} "
+            cd services/chips &&
+            git pull origin nome-del-tuo-branch &&
+            # Aggiungi qui i comandi da eseguire dopo il pull
+            # Per esempio, riavviare un servizio:
+            # sudo systemctl restart mio-servizio
+            touch ciao.txt
+          "
