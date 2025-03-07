@@ -26,7 +26,7 @@ jobs:
         run: |
           ssh -p 22 ${{ secrets.RASPBERRY_USER }}@${{ secrets.RASPBERRY_HOST }} "
             cd services/chips &&
-            git pull origin nome-del-tuo-branch &&
+            git pull origin main &&
             # Aggiungi qui i comandi da eseguire dopo il pull
             # Per esempio, riavviare un servizio:
             # sudo systemctl restart mio-servizio
