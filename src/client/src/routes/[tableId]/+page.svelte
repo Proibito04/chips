@@ -12,9 +12,34 @@
 	let { data }: PageProps = $props();
 	let isBetting = $state(false);
 	let isWithdrawModalOpen = $state(false);
+	let usernamePromiseResolve: (value: string | PromiseLike<string>) => void;
+	let showUsernamePopup = $state(true);
+	let inputUsername = $state('');
 
-	onMount(() => {
-		gameStore.connect(data.tableId, localStorage.getItem('username') || '');
+	function saveUsername() {
+		if (inputUsername.trim()) {
+			localStorage.setItem('username', inputUsername);
+			usernamePromiseResolve(inputUsername);
+			showUsernamePopup = false;
+		}
+	}
+
+	function createPromise(): Promise<string> {
+		return new Promise<string>((resolve) => {
+			usernamePromiseResolve = resolve;
+		});
+	}
+
+	onMount(async () => {
+		let username = localStorage.getItem('username');
+
+		if (!username) {
+			showUsernamePopup = true;
+			await createPromise();
+			username = localStorage.getItem('username');
+		}
+
+		gameStore.connect(data.tableId, username || '');
 	});
 
 	onDestroy(() => {
@@ -32,6 +57,29 @@
 		}
 	];
 </script>
+
+{#if showUsernamePopup}
+	<div
+		class="absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-95"
+	>
+		<div class="flex w-80 flex-col rounded-lg border-2 border-yellow-500 bg-gray-800 p-6 shadow-lg">
+			<h2 class="mb-4 text-xl font-bold text-white">Choose a username</h2>
+			<input
+				type="text"
+				bind:value={inputUsername}
+				placeholder="Enter your username"
+				onkeydown={(e) => e.key === 'Enter' && saveUsername()}
+				class="mb-4 rounded-lg border border-gray-600 bg-gray-700 px-4 py-3 text-white focus:border-yellow-500 focus:outline-none"
+			/>
+			<button
+				onclick={saveUsername}
+				class="rounded-lg bg-yellow-500 px-6 py-3 font-semibold text-gray-900 shadow-lg transition-all hover:bg-yellow-400 active:scale-95 active:transform"
+			>
+				Continue
+			</button>
+		</div>
+	</div>
+{/if}
 
 {#if $gameStore.connected}
 	<div class="min-h-screen bg-gray-900 pb-20">

@@ -3,7 +3,7 @@
 
 	// Props con valori di default
 
-	let { pot = 1000, playerChips = 100, minBet = 5, close = () => {} } = $props();
+	let { pot = 1000, playerChips = 100, minBet = 0, close = () => {} } = $props();
 
 	// State locale
 	let betAmount = $state(minBet);
