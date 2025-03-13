@@ -13,7 +13,7 @@
 	let isBetting = $state(false);
 	let isWithdrawModalOpen = $state(false);
 	let usernamePromiseResolve: (value: string | PromiseLike<string>) => void;
-	let showUsernamePopup = $state(true);
+	let showUsernamePopup = $state(false);
 	let inputUsername = $state('');
 
 	function saveUsername() {
