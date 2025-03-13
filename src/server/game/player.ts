@@ -16,10 +16,6 @@ export class Player {
 
   constructor(private username: string) {}
 
-  editBalance(amount: number) {
-    this.balance += amount;
-  }
-
   bet(amount: number): boolean {
     if (this.balance < amount) return false;
 
@@ -50,5 +46,15 @@ export class Player {
       username: this.username,
       chips: this.balance,
     };
+  }
+
+  editBalance(amount: number){
+    this.actionHistory.push({
+      type: ActionType.EDIT,
+      amount,
+      timestamp: new Date()
+    })
+
+    this.balance = amount
   }
 }

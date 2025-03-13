@@ -30,10 +30,13 @@ export class Table {
         return this.handleLeave(action.username);
       case "WITHDRAW":
         return this.handleWithdraw(action.username, action.payload.amount);
+      case "EDIT_BALANCE":
+        return this.handleEditBalance(action.username, action.payload);
     }
   }
 
   handleWithdraw(username: string, amount: number) {
+    // TODO fix the negative amount
     const player = this.players.get(username);
 
     if (!player) throw new Error("Player not found");
@@ -46,6 +49,22 @@ export class Table {
       payload: { username, amount },
     });
   }
+
+  handleEditBalance(
+    username: string,
+    payload: { username: string; amount: number }
+  ) {
+    const player = this.players.get(payload.username);
+    if (!player) throw new Error("Player not found");
+
+    player.editBalance(payload.amount);
+
+    this.broadcast({
+      type: "EDIT_BALANCE",
+      payload: { username: payload.username, amount: payload.amount },
+    });
+  }
+
 
   handleBet(username: string, amount: number) {
     const player = this.players.get(username);
@@ -91,6 +110,10 @@ export class Table {
     });
   }
 
+  /**
+   * Broadcast message to all players and update the state of the table
+   *
+   */
   private broadcast(message: any) {
     const messageStr = JSON.stringify(message);
     for (const ws of this.connections.values()) {

@@ -21,6 +21,8 @@
 	}
 </script>
 
+
+
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 	<div class="w-full max-w-sm rounded-lg bg-gray-800 p-6 shadow-xl">
 		<h3 class="mb-4 text-xl font-bold text-white">Withdraw Chips</h3>

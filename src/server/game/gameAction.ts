@@ -5,6 +5,7 @@ type ActionType =
   | "CHECK"
   | "RAISE"
   | "LEAVE"
+  | "EDIT_BALANCE"
   | "WITHDRAW";
 
 export interface GameAction {

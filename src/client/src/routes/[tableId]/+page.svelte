@@ -47,13 +47,13 @@
 	});
 
 	const tabs = [
+    {
+      label: 'Table',
+      content: TableView
+    },
 		{
 			label: 'Game',
 			content: GameView
-		},
-		{
-			label: 'Table',
-			content: TableView
 		}
 	];
 </script>
