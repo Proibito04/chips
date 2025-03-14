@@ -45,6 +45,7 @@ export class Table {
     this.pot -= amount;
 
     this.broadcast({
+      subject: username,
       type: "WITHDRAW",
       payload: { username, amount },
     });
@@ -61,10 +62,13 @@ export class Table {
 
     this.broadcast({
       type: "EDIT_BALANCE",
-      payload: { username: payload.username, amount: payload.amount },
+      payload: {
+        subject: username,
+        username: payload.username,
+        amount: payload.amount,
+      },
     });
   }
-
 
   handleBet(username: string, amount: number) {
     const player = this.players.get(username);
@@ -75,6 +79,7 @@ export class Table {
       this.pot += amount;
 
       this.broadcast({
+        subject: username,
         type: "PLAYER_BET",
         payload: { username, amount },
       });
@@ -105,6 +110,7 @@ export class Table {
     );
 
     this.broadcast({
+      subject: username,
       type: "PLAYER_JOINED",
       payload: { username, position: player.position },
     });

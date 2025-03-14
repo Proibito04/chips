@@ -52,7 +52,7 @@ export class Player {
     this.actionHistory.push({
       type: ActionType.EDIT,
       amount,
-      timestamp: new Date()
+      timestamp: new Date(),
     })
 
     this.balance = amount

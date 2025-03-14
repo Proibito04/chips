@@ -1,4 +1,3 @@
-// stores/game.ts
 import { writable } from "svelte/store";
 
 interface GameState {
@@ -53,6 +52,8 @@ function createGameStore() {
             break;
 
           default:
+            console.log("message", data, payload);
+
             // console.log(data.type, "Non so che fare");
 
             break;
