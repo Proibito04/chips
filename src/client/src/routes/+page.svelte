@@ -31,8 +31,7 @@
 		if (!tableId) error = 'If you want to join a table you must supply a table ID';
 	}
 
-	function handleCreate(ev: SubmitEvent) {
-		ev.preventDefault();
+	function handleCreate() {
 		ws = new WebSocket(`ws://192.168.1.105:3000/game?username=${username}`);
 
 		ws.onmessage = (event) => {
@@ -41,7 +40,11 @@
 				localStorage.setItem('username', username);
 				goto(data.tableId);
 			}
+			ws.onerror = (event) => {
+				error = (event as ErrorEvent).message;
+			};
 
+      error = `ws://192.168.1.105:3000/game?username=${username}`
 			messages = [...messages, data];
 		};
 	}
@@ -88,7 +91,8 @@
 			<p class="text-center text-gray-400">or</p>
 			<button
 				class="w-full cursor-pointer rounded-lg border-2 border-yellow-500 p-3 font-semibold text-yellow-500 transition-colors hover:bg-yellow-500 hover:text-gray-900"
-				onsubmit={handleCreate}
+				onsubmit={(ev) => ev.preventDefault}
+        onclick={handleCreate}
 			>
 				Create New Table
 			</button>
