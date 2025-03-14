@@ -30,7 +30,7 @@ function createGameStore() {
     subscribe,
     connect: (tableId: string, username: string) => {
       ws = new WebSocket(
-        `ws://localhost:3000/game?table=${tableId}&username=${username}`,
+        `ws://192.168.1.105:3000/game?table=${tableId}&username=${username}`,
       );
 
       ws.onmessage = (event) => {
