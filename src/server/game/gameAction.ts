@@ -6,8 +6,3 @@ export interface GameAction {
   payload: MessageClient;
 }
 
-export interface MessageBroadcast {
-  subject: string; // the name of the player who is doing the action
-  type: ActionType;
-  payload: MessageClient;
-}

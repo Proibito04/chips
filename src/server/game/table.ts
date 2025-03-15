@@ -1,8 +1,9 @@
 import {
   ActionType,
   type MessageClient,
+  type MessageServer,
+  type TableStatePayload,
 } from "@shared/sharedTypes";
-import { type MessageBroadcast } from "./gameAction";
 import { Player } from "./player";
 
 export class Table {
@@ -12,17 +13,22 @@ export class Table {
 
   constructor(public id: string) {}
 
-  get state() {
+  get state(): TableStatePayload {
     return {
+      tableId: this.id,
+      username: null,
+      pot: this.pot,
       players: Object.fromEntries(
         Array.from(this.players.entries()).map(([username, player]) => [
           username,
           player.toStateFormat(),
         ])
       ),
-      pot: this.pot,
+      messages: [], // You might want to maintain a message history in the Table class
+      connected: true,
     };
   }
+  
 
   handleAction(action: MessageClient & { username: string }) {
     try {
@@ -58,9 +64,10 @@ export class Table {
       this.broadcastAction({
         subject: action.username,
         type: ActionType.TABLE_STATE,
-        payload: action,
+        payload:  this.state,
       });
     } catch (error) {
+      // todo fix it
       console.error(`Error handling action ${action.type}:`, error);
       // Optionally broadcast error to clients
       this.broadcastAction({
@@ -112,11 +119,10 @@ export class Table {
   }
 
   handleLeave(username: string) {
-    const player = this.players.get(username);
-    if (!player) throw new Error("Player not found");
-
-    this.players.delete(username);
-    this.connections.delete(username);
+    // const player = this.players.get(username);
+    // if (!player) throw new Error("Player not found");
+    // this.players.delete(username);
+    // this.connections.delete(username);
   }
 
   private handleJoin(username: string, ws: WebSocket) {
@@ -133,25 +139,12 @@ export class Table {
   /**
    * Broadcast action to all players
    */
-  private broadcastAction(message: MessageBroadcast) {
-    const messageStr = JSON.stringify(message);
+  private broadcastAction(message: MessageServer) {
+    const msg = { ...message, ...this.state };
+    const messageStr = JSON.stringify(msg);
 
     for (const ws of this.connections.values()) {
       ws.send(messageStr);
-      this.sendTableState(ws);
     }
   }
-
-  /**
-   * Send table state to a specific connection
-   */
-  private sendTableState(ws: WebSocket) {
-    ws.send(
-      JSON.stringify({
-        type: "TABLE_STATE",
-        payload: this.state,
-      })
-    );
-  }
-
 }
