@@ -47,10 +47,10 @@
 	});
 
 	const tabs = [
-    {
-      label: 'Table',
-      content: TableView
-    },
+		{
+			label: 'Table',
+			content: TableView
+		},
 		{
 			label: 'Game',
 			content: GameView
@@ -60,7 +60,7 @@
 
 {#if showUsernamePopup}
 	<div
-		class="absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-95"
+		class="bg-opacity-95 absolute top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-gray-900"
 	>
 		<div class="flex w-80 flex-col rounded-lg border-2 border-yellow-500 bg-gray-800 p-6 shadow-lg">
 			<h2 class="mb-4 text-xl font-bold text-white">Choose a username</h2>
@@ -89,7 +89,7 @@
 		</div>
 
 		<!-- Bottom Fixed Section -->
-		<div class="fixed bottom-0 left-0 right-0 bg-gray-800 shadow-lg">
+		<div class="fixed right-0 bottom-0 left-0 bg-gray-800 shadow-lg">
 			{#if isBetting}
 				<BetSystem
 					pot={$gameStore.pot}

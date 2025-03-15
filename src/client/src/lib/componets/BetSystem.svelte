@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { gameStore } from '$lib/stores/game';
+	import { ActionType } from '@shared/sharedTypes';
 
 	// Props con valori di default
 
@@ -41,7 +42,7 @@
 
 	function onBet(betAmount: number) {
 		gameStore.send({
-			type: 'BET',
+			type: ActionType.BET,
 			payload: {
 				amount: betAmount
 			}
@@ -70,7 +71,7 @@
 					const numValue = betAmount || minBet;
 					betAmount = Math.min(Math.max(numValue, minBet), playerChips);
 				}}
-				class="w-full rounded-lg border bg-gray-900 py-1 text-center text-3xl font-bold text-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+				class="w-full rounded-lg border bg-gray-900 py-1 text-center text-3xl font-bold text-yellow-500 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
 			/>
 		</div>
 	</div>

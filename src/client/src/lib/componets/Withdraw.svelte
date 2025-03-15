@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { gameStore } from '$lib/stores/game';
+	import { ActionType } from '@shared/sharedTypes';
 	import { Coins } from 'lucide-svelte';
 
 	interface Props {
@@ -14,14 +15,12 @@
 		e.preventDefault();
 
 		gameStore.send({
-			type: 'WITHDRAW',
+			type: ActionType.WITHDRAW,
 			payload: { amount }
 		});
 		onClose();
 	}
 </script>
-
-
 
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 	<div class="w-full max-w-sm rounded-lg bg-gray-800 p-6 shadow-xl">
@@ -33,13 +32,13 @@
 					Amount to withdraw (max: {maxAmount})
 				</span>
 				<div class="relative">
-					<Coins class="absolute left-3 top-3 h-5 w-5 text-yellow-500" />
+					<Coins class="absolute top-3 left-3 h-5 w-5 text-yellow-500" />
 					<input
 						type="number"
 						max={maxAmount}
 						min={0}
 						bind:value={amount}
-						class="w-full rounded-lg bg-gray-700 p-3 pl-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+						class="w-full rounded-lg bg-gray-700 p-3 pl-10 text-white placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
 					/>
 				</div>
 			</div>

@@ -31,6 +31,7 @@
 		if (!tableId) error = 'If you want to join a table you must supply a table ID';
 	}
 
+	// TODO rivisit
 	function handleCreate() {
 		ws = new WebSocket(`ws://192.168.1.105:3000/game?username=${username}`);
 
@@ -44,7 +45,7 @@
 				error = (event as ErrorEvent).message;
 			};
 
-      error = `ws://192.168.1.105:3000/game?username=${username}`
+			error = `ws://192.168.1.105:3000/game?username=${username}`;
 			messages = [...messages, data];
 		};
 	}
@@ -62,7 +63,7 @@
 					placeholder="Username"
 					bind:value={username}
 					required
-					class="w-full rounded-lg bg-gray-700 p-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+					class="w-full rounded-lg bg-gray-700 p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
 				/>
 			</div>
 
@@ -73,7 +74,7 @@
 					type="text"
 					placeholder="Enter table ID"
 					bind:value={tableId}
-					class="w-full rounded-lg bg-gray-700 p-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+					class="w-full rounded-lg bg-gray-700 p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
 				/>
 			</div>
 
@@ -92,7 +93,7 @@
 			<button
 				class="w-full cursor-pointer rounded-lg border-2 border-yellow-500 p-3 font-semibold text-yellow-500 transition-colors hover:bg-yellow-500 hover:text-gray-900"
 				onsubmit={(ev) => ev.preventDefault}
-        onclick={handleCreate}
+				onclick={handleCreate}
 			>
 				Create New Table
 			</button>

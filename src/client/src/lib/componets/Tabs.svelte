@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-  interface Tab{
+	interface Tab {
 		label: string;
 		content: any;
 		props?: Record<string, any>;
@@ -23,10 +23,10 @@
 		}
 	});
 
-  function choseTab(tab: Tab, index: number) {
-    activeTab = index;
-    localStorage.setItem('lastTab', tab.label);
-  }
+	function choseTab(tab: Tab, index: number) {
+		activeTab = index;
+		localStorage.setItem('lastTab', tab.label);
+	}
 </script>
 
 <div class="w-full">

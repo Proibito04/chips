@@ -1,4 +1,4 @@
-import { Player } from "./game/player";
+import { ActionType } from "@shared/sharedTypes";
 import { Table } from "./game/table";
 
 const tables: Map<string, Table> = new Map();
@@ -30,8 +30,6 @@ const server = Bun.serve<{ username: string; table: string }, {}>({
     open(ws) {
       let table = tables.get(ws.data.table);
 
-      console.log(ws.data.table);
-
       if (!table && ws.data.table) {
         ws.send(JSON.stringify({ type: "ERROR", message: "Table not found" }));
         return;
@@ -45,7 +43,7 @@ const server = Bun.serve<{ username: string; table: string }, {}>({
       }
 
       table.handleAction({
-        type: "JOIN",
+        type: ActionType.JOIN,
         username: ws.data.username,
         payload: { ws },
       });
@@ -68,7 +66,7 @@ const server = Bun.serve<{ username: string; table: string }, {}>({
       const table = tables.get(ws.data.table);
       if (table) {
         table.handleAction({
-          type: "LEAVE",
+          type: ActionType.LEAVE,
           username: ws.data.username,
         });
       }

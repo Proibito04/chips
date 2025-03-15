@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { gameStore } from '$lib/stores/game';
+	import { ActionType } from '@shared/sharedTypes';
 	import { PiggyBank, Edit, User } from 'lucide-svelte';
 
 	let showChangeAmount = $state(false);
@@ -20,7 +21,7 @@
 
 	function handleSubmit() {
 		gameStore.send({
-			type: 'EDIT_BALANCE',
+			type: ActionType.EDIT_BALANCE,
 			payload: { username: player.username, amount }
 		});
 
@@ -37,12 +38,12 @@
 				<div>
 					<span class="mb-2 block text-sm text-gray-400"> New balance </span>
 					<div class="relative">
-						<PiggyBank class="absolute left-3 top-3 h-5 w-5 text-yellow-500" />
+						<PiggyBank class="absolute top-3 left-3 h-5 w-5 text-yellow-500" />
 						<input
 							type="number"
 							min={0}
 							bind:value={amount}
-							class="w-full rounded-lg bg-gray-700 p-3 pl-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+							class="w-full rounded-lg bg-gray-700 p-3 pl-10 text-white placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
 						/>
 					</div>
 				</div>

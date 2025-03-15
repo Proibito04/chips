@@ -1,15 +1,13 @@
-type ActionType =
-  | "JOIN"
-  | "BET"
-  | "FOLD"
-  | "CHECK"
-  | "RAISE"
-  | "LEAVE"
-  | "EDIT_BALANCE"
-  | "WITHDRAW";
+import { ActionType, type MessageClient } from "@shared/sharedTypes";
 
 export interface GameAction {
   type: ActionType;
   username: string;
-  payload?: any;
+  payload: MessageClient;
+}
+
+export interface MessageBroadcast {
+  subject: string; // the name of the player who is doing the action
+  type: ActionType;
+  payload: MessageClient;
 }
