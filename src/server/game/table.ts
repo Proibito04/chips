@@ -48,8 +48,6 @@ export class Table {
           break;
 
         case ActionType.WITHDRAW:
-          console.log(action.username);
-
           this.handleWithdraw(action.username, action.payload.amount);
           break;
 
@@ -60,8 +58,6 @@ export class Table {
         default:
           throw new Error(`Unknown action type: ${(action as any).type}`);
       }
-
-      console.log(action);
 
       this.addMessage(action);
 

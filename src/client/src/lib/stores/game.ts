@@ -38,7 +38,6 @@ function createGameStore() {
             break;
 
           default:
-            console.log("message", data, payload);
             break;
         }
       };
