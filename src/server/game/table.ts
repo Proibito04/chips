@@ -1,7 +1,6 @@
 import {
   ActionType,
-  type MessageClient,
-  type MessageServer,
+  type Message,
   type TableStatePayload,
 } from "@shared/sharedTypes";
 import { Player } from "./player";
@@ -10,6 +9,7 @@ export class Table {
   private players: Map<string, Player> = new Map();
   private connections: Map<string, WebSocket> = new Map();
   private pot: number = 0;
+  private messageLogs: Message[] = [];
 
   constructor(public id: string) {}
 
@@ -24,13 +24,12 @@ export class Table {
           player.toStateFormat(),
         ])
       ),
-      messages: [], // You might want to maintain a message history in the Table class
+      messages: [...this.messageLogs],
       connected: true,
     };
   }
-  
 
-  handleAction(action: MessageClient & { username: string }) {
+  handleAction(action: Message & { username: string }) {
     try {
       switch (action.type) {
         case ActionType.JOIN:
@@ -49,6 +48,8 @@ export class Table {
           break;
 
         case ActionType.WITHDRAW:
+          console.log(action.username);
+
           this.handleWithdraw(action.username, action.payload.amount);
           break;
 
@@ -60,12 +61,18 @@ export class Table {
           throw new Error(`Unknown action type: ${(action as any).type}`);
       }
 
-      // Broadcast the action and updated state
-      this.broadcastAction({
+      console.log(action);
+
+      this.addMessage(action);
+
+      const message: Message = {
         subject: action.username,
         type: ActionType.TABLE_STATE,
-        payload:  this.state,
-      });
+        payload: this.state,
+      };
+
+      // Broadcast the action and updated state
+      this.broadcastAction(message);
     } catch (error) {
       // todo fix it
       console.error(`Error handling action ${action.type}:`, error);
@@ -74,10 +81,7 @@ export class Table {
         subject: action.username,
         type: ActionType.ERROR,
         payload: {
-          type: ActionType.ERROR,
-          payload: {
-            message: error as string,
-          },
+          message: error as string,
         },
       });
       throw error;
@@ -136,12 +140,42 @@ export class Table {
     this.connections.set(username, ws);
   }
 
+  private transformMessage(action: Message & { username: string }): Message {
+    let payload: any;
+
+    switch (action.type) {
+      case ActionType.JOIN:
+        payload = {};
+        break;
+      case ActionType.LEAVE:
+      case ActionType.BET:
+      case ActionType.WITHDRAW:
+      case ActionType.EDIT_BALANCE:
+        payload = action.payload;
+        break;
+      case ActionType.ERROR:
+        payload = { message: action.payload.message };
+        break;
+      default:
+        throw new Error(`Unknown action type: ${(action as any).type}`);
+    }
+
+    return {
+      type: action.type,
+      subject: action.username,
+      payload,
+    };
+  }
+
+  private addMessage(action: Message & { username: string }) {
+    this.messageLogs.push(this.transformMessage(action));
+  }
+
   /**
    * Broadcast action to all players
    */
-  private broadcastAction(message: MessageServer) {
-    const msg = { ...message, ...this.state };
-    const messageStr = JSON.stringify(msg);
+  private broadcastAction(message: Message) {
+    const messageStr = JSON.stringify(message);
 
     for (const ws of this.connections.values()) {
       ws.send(messageStr);

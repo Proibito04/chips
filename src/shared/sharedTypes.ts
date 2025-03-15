@@ -13,112 +13,31 @@ export enum ActionType {
   ERROR = "ERROR",
 }
 
-export type MessageClient =
-  | {
-      type: ActionType.EDIT_BALANCE;
-      payload: EditBalancePayload;
-    }
-  | {
-      type: ActionType.BET;
-      payload: BetPayload;
-    }
-  | {
-      type: ActionType.WITHDRAW;
-      payload: WithdrawPayload;
-    }
-  | {
-      type: ActionType.JOIN;
-      payload: JoinPayload;
-    }
-  | {
-      type: ActionType.LEAVE;
-      payload?: never;
-    }
-  | {
-      type: ActionType.ERROR;
-      payload: ErrorPayload;
-    };
-
-interface EditBalancePayload {
+// Common payloads
+export interface EditBalancePayload {
   username: string;
   amount: number;
 }
 
-interface BetPayload {
+export interface BetPayload {
   amount: number;
 }
 
-interface WithdrawPayload {
+export interface WithdrawPayload {
   amount: number;
 }
 
 export interface ErrorPayload {
   message: string;
-  code?: number; // maybe in the future it will useful
+  code?: number;
 }
 
-interface JoinPayload {
+export interface JoinPayload {
   ws: ServerWebSocket<{
     username: string;
     table: string;
   }>;
 }
-
-// ---------------------------------------------------------------------------
-// Types of messages sent or received by the server
-
-export type MessageServer =
-  | {
-      type: ActionType.TABLE_STATE;
-      payload: TableStatePayload;
-      subject?: string;
-    }
-  | {
-      type: ActionType.EDIT_BALANCE;
-      payload: EditBalancePayload;
-      subject: string;
-    }
-  | {
-      type: ActionType.BET;
-      payload: BetPayload;
-      subject: string;
-    }
-  | {
-      type: ActionType.WITHDRAW;
-      payload: WithdrawPayload;
-      subject: string;
-    }
-  | {
-      type: ActionType.JOIN;
-      payload: JoinPayload;
-      subject: string;
-    }
-  | {
-      type: ActionType.LEAVE;
-      payload?: never;
-      subject: string;
-    }
-  | {
-      type: ActionType.FOLD;
-      payload?: never;
-      subject: string;
-    }
-  | {
-      type: ActionType.CHECK;
-      payload?: never;
-      subject: string;
-    }
-  | {
-      type: ActionType.RAISE;
-      payload: BetPayload;
-      subject: string;
-    }
-  | {
-      type: ActionType.ERROR;
-      payload: ErrorPayload;
-      subject?: string;
-    };
-
 
 export interface TableStatePayload {
   tableId: string | null;
@@ -130,6 +49,63 @@ export interface TableStatePayload {
       chips: number;
     };
   };
-  messages: MessageServer[];
+  messages: Message[];
   connected: boolean;
 }
+
+// Unified message type for both client and server
+export type Message =
+  | {
+      type: ActionType.TABLE_STATE;
+      payload: TableStatePayload;
+      subject?: string;
+    }
+  | {
+      type: ActionType.EDIT_BALANCE;
+      payload: EditBalancePayload;
+      subject?: string;
+    }
+  | {
+      type: ActionType.BET;
+      payload: BetPayload;
+      subject?: string;
+    }
+  | {
+      type: ActionType.WITHDRAW;
+      payload: WithdrawPayload;
+      subject?: string;
+    }
+  | {
+      type: ActionType.JOIN;
+      payload: JoinPayload;
+      subject?: string;
+    }
+  | {
+      type: ActionType.LEAVE;
+      payload?: never;
+      subject?: string;
+    }
+  | {
+      type: ActionType.FOLD;
+      payload?: never;
+      subject?: string;
+    }
+  | {
+      type: ActionType.CHECK;
+      payload?: never;
+      subject?: string;
+    }
+  | {
+      type: ActionType.RAISE;
+      payload: BetPayload;
+      subject?: string;
+    }
+  | {
+      type: ActionType.ERROR;
+      payload: ErrorPayload;
+      subject?: string;
+    };
+
+// Type guards or utility types can differentiate between client and server messages if needed
+export type ClientMessage = Omit<Message, "subject">;
+export type ServerMessage = Message & { subject?: string };

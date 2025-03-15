@@ -1,8 +1,7 @@
 import { writable } from "svelte/store";
 import {
   ActionType,
-  type MessageClient,
-  type MessageServer,
+  type Message,
   type TableStatePayload,
 } from "@shared/sharedTypes";
 
@@ -27,24 +26,19 @@ function createGameStore() {
 
       // message coming from the server
       ws.onmessage = (event) => {
-        const data: MessageServer = JSON.parse(event.data);
+        const data: Message = JSON.parse(event.data);
         const payload = data.payload;
 
         switch (data.type) {
           case ActionType.TABLE_STATE:
             update((state) => {
-              console.log("table state");
               state = data.payload;
               return state;
             });
-
             break;
 
           default:
             console.log("message", data, payload);
-
-            // console.log(data.type, "Non so che fare");
-
             break;
         }
       };
@@ -64,7 +58,7 @@ function createGameStore() {
       }));
     },
 
-    send: (message: MessageClient) => {
+    send: (message: Message) => {
       if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify(message));
       }
