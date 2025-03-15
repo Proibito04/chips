@@ -50,7 +50,7 @@
 	}
 </script>
 
-<div class="w-full max-w-md rounded-lg bg-gray-800 p-4 shadow-lg">
+<div class="w-full max-w-md touch-none rounded-lg bg-gray-800 p-4 shadow-lg">
 	<!-- Display del bet corrente -->
 	<div class="w-full max-w-md rounded-lg bg-gray-800 p-4 shadow-lg">
 		<!-- Input del bet corrente -->
@@ -92,7 +92,12 @@
 			bind:value={betAmount}
 			onmousedown={() => (isSliderActive = true)}
 			onmouseup={() => (isSliderActive = false)}
-			class="h-2 w-3/5 cursor-pointer appearance-none rounded-lg bg-gray-700"
+			class="h-2 w-3/5 cursor-pointer appearance-none rounded-lg bg-gray-700
+      [&::-moz-range-thumb]:h-8 [&::-moz-range-thumb]:w-8
+      [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-blue-500
+      [&::-webkit-slider-thumb]:h-8
+      [&::-webkit-slider-thumb]:w-8 [&::-webkit-slider-thumb]:appearance-none
+      [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-500"
 		/>
 
 		<button
