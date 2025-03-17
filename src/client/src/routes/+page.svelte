@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { Coins } from 'lucide-svelte';
+	import { PUBLIC_WEBSOCKET_URL } from '$env/static/public';
 	import { goto } from '$app/navigation';
 
 	let ws: WebSocket;
@@ -33,7 +33,7 @@
 
 	// TODO rivisit
 	function handleCreate() {
-		ws = new WebSocket(`wss://chipsmaster.app:3000/game?username=${username}`);
+		ws = new WebSocket(`${PUBLIC_WEBSOCKET_URL}/game?username=${username}`);
 
 		ws.onmessage = (event) => {
 			const data = JSON.parse(event.data);
@@ -45,7 +45,7 @@
 				error = (event as ErrorEvent).message;
 			};
 
-			error = `wss://chipsmaster.app/game?username=${username}`;
+			error = `${PUBLIC_WEBSOCKET_URL}/game?username=${username}`;
 			messages = [...messages, data];
 		};
 	}

@@ -4,6 +4,7 @@ import {
   type Message,
   type TableStatePayload,
 } from "@shared/sharedTypes";
+import {  PUBLIC_WEBSOCKET_URL } from '$env/static/public';
 
 function createGameStore() {
   const { subscribe, set, update } = writable<TableStatePayload>({
@@ -21,7 +22,7 @@ function createGameStore() {
     subscribe,
     connect: (tableId: string, username: string) => {
       ws = new WebSocket(
-        `wss://chipsmaster.app:3000/game?table=${tableId}&username=${username}`,
+        `${PUBLIC_WEBSOCKET_URL}/game?table=${tableId}&username=${username}`,
       );
 
       // message coming from the server

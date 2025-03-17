@@ -4,6 +4,7 @@ import { Table } from "./game/table";
 const tables: Map<string, Table> = new Map();
 
 const server = Bun.serve<{ username: string; table: string }, {}>({
+  port: 54321,
   async fetch(req, server) {
     const url = new URL(req.url);
     const tableId = url.searchParams.get("table");
