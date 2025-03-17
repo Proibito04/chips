@@ -18,12 +18,14 @@ pkill -f "$CLIENT_CMD"
 
 (
   cd src/server
+  bun i
   $SERVER_CMD 2>&1 | sed 's/^/\x1b[32m[server]\x1b[0m /'
 ) &
 
 (
   cd src/client
   rm -rf build
+  bun i
   $CLIENT_CMD 2>&1 | sed 's/^/\x1b[33m[client]\x1b[0m /' && 
   echo "running build"
   PORT=$PORT bun ./build/index.js

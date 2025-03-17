@@ -21,7 +21,7 @@ function createGameStore() {
     subscribe,
     connect: (tableId: string, username: string) => {
       ws = new WebSocket(
-        `ws://chipsmaster.app:3000/game?table=${tableId}&username=${username}`,
+        `wss://chipsmaster.app:3000/game?table=${tableId}&username=${username}`,
       );
 
       // message coming from the server

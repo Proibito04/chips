@@ -33,7 +33,7 @@
 
 	// TODO rivisit
 	function handleCreate() {
-		ws = new WebSocket(`ws://chipsmaster.app:3000/game?username=${username}`);
+		ws = new WebSocket(`wss://chipsmaster.app:3000/game?username=${username}`);
 
 		ws.onmessage = (event) => {
 			const data = JSON.parse(event.data);
@@ -45,7 +45,7 @@
 				error = (event as ErrorEvent).message;
 			};
 
-			error = `ws://chipsmaster.app/game?username=${username}`;
+			error = `wss://chipsmaster.app/game?username=${username}`;
 			messages = [...messages, data];
 		};
 	}
