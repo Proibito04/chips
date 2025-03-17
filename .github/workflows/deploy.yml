@@ -30,5 +30,6 @@ jobs:
             # Aggiungi qui i comandi da eseguire dopo il pull
             # Per esempio, riavviare un servizio:
             # sudo systemctl restart mio-servizio
-            touch ciao.txt
+            echo "building the site"
+            cd ./startup.sh # add the sysctl
           "

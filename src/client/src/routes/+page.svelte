@@ -33,7 +33,7 @@
 
 	// TODO rivisit
 	function handleCreate() {
-		ws = new WebSocket(`ws://192.168.1.105:3000/game?username=${username}`);
+		ws = new WebSocket(`ws://chipsmaster.app:3000/game?username=${username}`);
 
 		ws.onmessage = (event) => {
 			const data = JSON.parse(event.data);
@@ -45,7 +45,7 @@
 				error = (event as ErrorEvent).message;
 			};
 
-			error = `ws://192.168.1.105:3000/game?username=${username}`;
+			error = `ws://chipsmaster.app/game?username=${username}`;
 			messages = [...messages, data];
 		};
 	}
@@ -63,7 +63,7 @@
 					placeholder="Username"
 					bind:value={username}
 					required
-					class="w-full rounded-lg bg-gray-700 p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+					class="w-full rounded-lg bg-gray-700 p-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
 				/>
 			</div>
 
@@ -74,7 +74,7 @@
 					type="text"
 					placeholder="Enter table ID"
 					bind:value={tableId}
-					class="w-full rounded-lg bg-gray-700 p-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+					class="w-full rounded-lg bg-gray-700 p-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
 				/>
 			</div>
 

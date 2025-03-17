@@ -3,7 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun --watch websocket.ts"
+    "dev": "bun --watch websocket.ts",
+    "build": "bun websocket.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
