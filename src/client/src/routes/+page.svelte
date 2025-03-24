@@ -87,20 +87,23 @@
     }
   }
   
-  function handleCreate(e) {
-    e.preventDefault();
-    
-    if (!username.trim()) {
-      error = "Username is required";
-      return;
-    }
-    
-    // Save username to localStorage
-    localStorage.setItem('username', username);
-    
-    // Navigate to create table page or create table here
-    goto('/create-table');
-  }
+  function handleCreate() {
+		ws = new WebSocket(`${PUBLIC_WEBSOCKET_URL}/game?username=${username}`);
+
+		ws.onmessage = (event) => {
+			const data = JSON.parse(event.data);
+			if (data.type == 'TABLE_CREATED') {
+				localStorage.setItem('username', username);
+				goto(data.tableId);
+			}
+			ws.onerror = (event) => {
+				error = (event as ErrorEvent).message;
+			};
+
+			error = `${PUBLIC_WEBSOCKET_URL}/game?username=${username}`;
+			messages = [...messages, data];
+		};
+	}
   
   function joinTable() {
     error = ''; // Reset error
